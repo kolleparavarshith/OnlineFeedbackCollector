@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h1>Admin Dashboard</h1>
+
+<h3>Total Feedback: {{ total_feedback }}</h3>
+
+<h3>Average Rating: {{ avg_rating }}</h3>
+
+<a href="/export-csv">
+
+    <button>Export CSV</button>
+
+</a>
+
+<table border="1">
+
+    <tr>
+
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Rating</th>
+        <th>Comments</th>
+
+    </tr>
+
+    {% for item in feedback %}
+
+    <tr>
+
+        <td>{{ item[0] }}</td>
+        <td>{{ item[1] }}</td>
+        <td>{{ item[2] }}</td>
+        <td>{{ item[3] }}</td>
+        <td>{{ item[4] }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<hr>
+
+<h2>Feedback Ratings Chart</h2>
+
+<canvas id="ratingChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('ratingChart');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: {{ ratings | safe }},
+
+        datasets: [{
+
+            label: 'Number of Ratings',
+
+            data: {{ counts | safe }},
+
+            borderWidth: 1
+
+        }]
+    },
+
+    options: {
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true
+
+            }
+        }
+    }
+});
+
+</script>
+
+{% endblock %}
